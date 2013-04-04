@@ -2,6 +2,6 @@
   "name": "sass",
   "version": "0.0.0",
   "dependencies": {
-    "normalize-css": "~2.1.0"
+    "normalize.scss": "~2.1.0"
   }
 }

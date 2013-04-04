@@ -4,6 +4,15 @@ module.exports = (grunt) ->
 	# Initialize the configuration.
 	@initConfig
 		pkg: grunt.file.readJSON('package.json')
+		# paths
+		path:
+			jsDir:'scripts/'
+			devDir: '#{scripts}/dev'
+			prodDir: '#{scripts}/prod'
+			sassDir: 'scss/'
+			coffeDir: 'coffee'
+			environment: 'dev'
+
 
 		#Compass task
 		compass:
