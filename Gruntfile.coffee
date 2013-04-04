@@ -13,7 +13,7 @@ module.exports = (grunt) ->
 				prodDir: '#{scripts}/prod'
 				libsDir: 'scripts/libs/'
 				bowLibsDir: 'scripts/libs/components/'
-				sassDir: 'scss/'
+				sassDir: 'sass/'
 				cssDir: 'stylesheets/'
 				imgDir: 'images/'
 
@@ -26,7 +26,7 @@ module.exports = (grunt) ->
 				cssDir: '<%= conf.path.cssDir %>'
 				sassDir: '<%= conf.path.sassDir %>'
 				imagesDir: '<%= conf.path.imgDir %>'
-				#specify: ['public/sass/rhtools.scss', 'public/sass/jquery-ui-1.10.2.custom.scss']
+				# specify: ['<%= conf.path.sassDir %>_baseStyle.scss', 'public/sass/jquery-ui-1.10.2.custom.scss']
 				javascriptsDir: '<%= conf.path.jsDir %>'
 				force: true
 			files:['<%= conf.path.sassDir %>']
