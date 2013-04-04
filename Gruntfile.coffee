@@ -5,24 +5,31 @@ module.exports = (grunt) ->
 	@initConfig
 		pkg: grunt.file.readJSON('package.json')
 		# paths
-		path:
-			jsDir:'scripts/'
-			devDir: '#{scripts}/dev'
-			prodDir: '#{scripts}/prod'
-			sassDir: 'scss/'
-			coffeDir: 'coffee'
-			environment: 'dev'
+		conf:
+			path:
+				jsDir:'scripts/'
+				coffeeDir: 'coffee/'
+				devDir: '#{scripts}/dev'
+				prodDir: '#{scripts}/prod'
+				libsDir: 'scripts/libs/'
+				bowLibsDir: 'scripts/libs/components/'
+				sassDir: 'scss/'
+				cssDir: 'stylesheets/'
+				imgDir: 'images/'
 
+			env: 'dev'
+			banner: '/*! <%= pkg.name %> - V: <%= pkg.version %> <%= conf.env %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
 
 		#Compass task
 		compass:
 			options:
-					cssDir: 'public/styles'
-					sassDir: 'public/sass/'
-					imagesDir: 'public/images'
-					specify: ['public/sass/rhtools.scss', 'public/sass/jquery-ui-1.10.2.custom.scss']
-					javascriptsDir: 'public/scripts'
-					force: true
+				cssDir: '<%= conf.path.cssDir %>'
+				sassDir: '<%= conf.path.sassDir %>'
+				imagesDir: '<%= conf.path.imgDir %>'
+				#specify: ['public/sass/rhtools.scss', 'public/sass/jquery-ui-1.10.2.custom.scss']
+				javascriptsDir: '<%= conf.path.jsDir %>'
+				force: true
+			files:['<%= conf.path.sassDir %>']
 
 			dev:
 				options:
@@ -31,38 +38,31 @@ module.exports = (grunt) ->
 			prod:
 				options:
 					debugInfo :false
+
 		# Concat Task
 		concat:
-			dev:
-				src: ['public/scripts/vendor/jquery.uniform.js',
-					'public/scripts/vendor/waypoints.js',
-					'public/scripts/vendor/waypoints-sticky.min.js',
-					'public/scripts/vendor/fx.js',
-					'public/scripts/vendor/jquery.chosen.js',
-					'public/scripts/vendor/jquery.nouislider.js']
-				dest: 'public/scripts/build/plugins.js'
+			options:
+				banner: '<%= conf.banner %>'
 
 			prod:
-				src: ['public/scripts/build/plugins.js',
-					'public/scripts/ui.js',
-					'public/scripts/hrAppSearch.js',
-					'public/scripts/widget.js',
-					'public/scripts/main.js'],
-				dest: 'public/scripts/build/scripts.concat.js'
+				src:['<%= conf.path.libsDir %>/**/*.js'
+				]
+				dest: '<%= conf.path.libsDir %>/plugins.js'
+
 
 		# JSHint task
 		jshint:
 			files: ['<%= watch.jsFiles.files %>']
 
 			options:
-				browser: true
-				boss: true
-				curly: false
-				eqeqeq: false
-				eqnull: true
-				camelcase : false
-				evil : false
-				shadow: false
+				# browser: true
+				# boss: true
+				# curly: false
+				# eqeqeq: false
+				# eqnull: true
+				# camelcase : false
+				# evil : false
+				# shadow: false
 				globals:
 					jQuery: true
 
@@ -70,20 +70,20 @@ module.exports = (grunt) ->
 		uglify:
 			prod:
 				options:
-					sourceMap: 'public/scripts/build/scripts.min-map.js'
+					sourceMap: '<%= conf.path.libsDir %>scripts.min-map.js'
 
 				files:
-					'public/scripts/build/scripts.min.js': ['<%= concat.prod.dest %>']
+					'<%= conf.path.prodDir %>scripts.min.js': ['<%= concat.prod.dest %>']
 
 		# css min Task
 		cssmin:
 			compress:
 				options:
-					banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+					banner: '<%= conf.banner %>'
 					report: 'gzip'
 
 				files:
-					'public/styles/rhtools.min.css': ['public/styles/rhtools.css']
+					'<%= conf.path.cssDir %>screen.min.css': ['<%= conf.path.cssDir %>screen.css']
 
 		# Coffee task
 		coffee:
@@ -92,21 +92,21 @@ module.exports = (grunt) ->
 
 			compile:
 				files:
-					'public/scripts/main.js': 'public/coffee/main.coffee'
-					'public/scripts/uiTest.js': 'public/coffee/ui.coffee'
+					'<%= conf.path.jsDir %>main.js': '<%= conf.path.coffeeDir %>main.coffee'
+
 
 		#watch task
 		watch:
 			scss:
-				files: ['<%= compass.options.sassDir %>/*.scss'],
+				files: ['<%= compass.options.sassDir %>*.scss'],
 				tasks: ['compass:dev']
 
 			jsFiles:
-				files: ['public/scripts/main.js','public/scripts/ui.js'] #,'public/scripts/hrAppSearch.js'
+				files: ['<%= conf.path.jsDir %>main.js'] #,'public/scripts/hrAppSearch.js'
 				tasks: ['jshintage']
 
 			coffee:
-				files: 'public/coffee/*.coffee'
+				files: '<%= conf.path.coffeeDir %>*.coffee'
 				tasks: ['kawa']
 
 	# Load Grunt plugins.
@@ -120,7 +120,7 @@ module.exports = (grunt) ->
 
 	# Default task.
 	@registerTask "default", ["jshint"]
-	@registerTask 'default', ['compass:dev', 'concat:dev']
+	@registerTask 'default', ['compass:dev', 'concat:prod']
 	@registerTask 'jshintage', ['jshint']
 	@registerTask 'uglifing', ['uglify']
 	@registerTask 'kawa', ['coffee:compile']
