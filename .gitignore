@@ -1,5 +1,4 @@
-temp
-dist
+temp/
 .sass-cache
 ._.DS_Store
 /.settings
