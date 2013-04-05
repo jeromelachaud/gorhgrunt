@@ -1,7 +1,7 @@
-var bob;
+var daFonk, testFunk;
 
-bob = function() {
-  return console.log('hello world !');
-};
+daFonk = ", FunkyStyle yo";
 
-bob();
+testFunk = (function() {
+  return console.log("hello world " + daFonk + "!");
+})();

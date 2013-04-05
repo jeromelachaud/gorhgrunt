@@ -94,6 +94,16 @@ module.exports = (grunt) ->
 				files:
 					'<%= conf.path.jsDir %>main.js': '<%= conf.path.coffeeDir %>main.coffee'
 
+			glob_to_multiple:
+				expand: true,
+				cwd: '<%= conf.path.coffeeDir %>',
+				src: ['*.coffee'],
+				dest: '<%= conf.path.jsDir %>',
+				ext: '.js'
+
+
+			dev:
+				sourceMap: true
 
 		#watch task
 		watch:
@@ -119,10 +129,9 @@ module.exports = (grunt) ->
 	@loadNpmTasks "grunt-contrib-coffee"
 
 	# Default task.
-	@registerTask "default", ["jshint"]
 	@registerTask 'default', ['compass:dev', 'concat:prod']
 	@registerTask 'jshintage', ['jshint']
 	@registerTask 'uglifing', ['uglify']
 	@registerTask 'kawa', ['coffee:compile']
-	@registerTask 'construct', ['coffee:compile','compass:prod', 'cssmin', 'concat', 'uglify']
+	@registerTask 'construct', ['coffee:glob_to_multiple','compass:prod', 'cssmin', 'concat', 'uglify']
 	@registerTask 'compassion', ['cssmin']
