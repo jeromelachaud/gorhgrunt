@@ -7,15 +7,18 @@ module.exports = (grunt) ->
 		# paths
 		conf:
 			path:
-				jsDir:'scripts/'
-				coffeeDir: 'coffee/'
-				devDir: '#{scripts}/dev'
-				prodDir: '#{scripts}/prod'
-				libsDir: 'scripts/libs/'
-				bowLibsDir: 'scripts/libs/components/'
-				sassDir: 'sass/'
-				cssDir: 'stylesheets/'
-				imgDir: 'images/'
+				jsDir:'sources/scripts/'
+				coffeeDir: 'sources/coffee/'
+				devDir: 'sources/#{scripts}/dev'
+				prodDir: 'sources/#{scripts}/prod'
+				libsDir: 'sources/scripts/libs/'
+				bowLibsDir: 'sources/scripts/libs/components/'
+				sassDir: 'sources/sass/'
+				cssDir: 'sources/stylesheets/'
+				imgSrcDir: 'sources/medias/imgSrc/'
+				imgDir: 'sources/medias/img/'
+				srcDir: 'sources/'
+				testDir: 'test/'
 
 			env: 'dev'
 			banner: '/*! <%= pkg.name %> - V: <%= pkg.version %> <%= conf.env %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -119,6 +122,49 @@ module.exports = (grunt) ->
 				files: '<%= conf.path.coffeeDir %>*.coffee'
 				tasks: ['kawa']
 
+		#copy task
+		copy: {
+			main: {
+				files: [{
+					expand: true,
+					dot: true,
+					cwd: '<%= conf.path.srcDir %>',
+					dest: '<%= conf.path.testDir %>',
+					src: [
+						'**'
+					]
+				}]
+			}
+		},
+
+		imagemin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.path.imgSrcDir %>/images',
+                    src: '{,*/}*.{png,jpg,jpeg}',
+                    dest: '<%= conf.path.imgDir %>/images'
+                }]
+            }
+        },
+		# imagemin:									# Task
+		# 	files: 
+		# 		expand: true,
+		# 		cwd: '<%= conf.path.imgSrcDir %>',
+		# 		src: ['*.{png,jpg,jpeg}'],
+		# 		dest: '<%= conf.path.imgDir %>',
+		# 	dist:									# Target
+		# 		options:							# Target options
+		# 			optimizationLevel: 3
+				
+
+
+		# 	dev:
+		# 		options:
+		# 			optimizationLevel: 0
+				
+
+
 	# Load Grunt plugins.
 	@loadNpmTasks "grunt-contrib-compass"
 	@loadNpmTasks "grunt-contrib-watch"
@@ -127,7 +173,10 @@ module.exports = (grunt) ->
 	@loadNpmTasks "grunt-contrib-uglify"
 	@loadNpmTasks "grunt-contrib-cssmin"
 	@loadNpmTasks "grunt-contrib-coffee"
-
+	@loadNpmTasks "grunt-contrib-copy"
+	@loadNpmTasks "grunt-contrib-usemin"
+	@loadNpmTasks "grunt-contrib-imagemin"
+	
 	# Default task.
 	@registerTask 'default', ['compass:dev', 'concat:prod']
 	@registerTask 'jshintage', ['jshint']
@@ -135,3 +184,5 @@ module.exports = (grunt) ->
 	@registerTask 'kawa', ['coffee:glob_to_multiple']
 	@registerTask 'construct', ['coffee:glob_to_multiple','compass:prod', 'cssmin', 'concat', 'uglify']
 	@registerTask 'compassion', ['cssmin']
+	@registerTask 'copieur', ['copy:main']
+	@registerTask 'pinture', ['imagemin:dist']
