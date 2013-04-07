@@ -132,6 +132,6 @@ module.exports = (grunt) ->
 	@registerTask 'default', ['compass:dev', 'concat:prod']
 	@registerTask 'jshintage', ['jshint']
 	@registerTask 'uglifing', ['uglify']
-	@registerTask 'kawa', ['coffee:compile']
+	@registerTask 'kawa', ['coffee:glob_to_multiple']
 	@registerTask 'construct', ['coffee:glob_to_multiple','compass:prod', 'cssmin', 'concat', 'uglify']
 	@registerTask 'compassion', ['cssmin']

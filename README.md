@@ -16,6 +16,7 @@ grunt need node and npm installed to run you can get them here [node.js].
 if you previously installed grunt, and are not using grunt > 0.4 you need to uninstall it first, you can do so with this command
 
 ```npm uninstall -g grunt```
+
 #### 2. install the grunt-cli
 This will put the grunt command in your system path, allowing it to be run from any directory.
 
@@ -38,7 +39,7 @@ You now are ready to use grunt and forget the hassle of merging all these css/js
 
 ```grunt watch```
 
-change anything in the sass/js files save, grunt do the work ...
+change anything in the sass/js files, save, grunt do the work ...
 
 #### edit the configuration
 
