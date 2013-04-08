@@ -146,6 +146,9 @@ module.exports = (grunt) ->
                     dest: '<%= conf.path.imgDir %>/images'
                 }]
             }
+
+
+            # grunt.log.writeln('<%= conf.path.imgSrcDir %>');
         },
 		# imagemin:									# Task
 		# 	files: 
@@ -186,3 +189,10 @@ module.exports = (grunt) ->
 	@registerTask 'compassion', ['cssmin']
 	@registerTask 'copieur', ['copy:main']
 	@registerTask 'pinture', ['imagemin:dist']
+	grunt.registerTask "compliment", "Treat yo' self!", ->
+		defaults = ["No one cares to customize me."]
+
+		# Notice we use the grunt object to retrieve configuration.
+		compliments = this.conf.path.imgDir  or defaults
+		index = Math.floor(Math.random() * compliments.length)
+		grunt.log.writeln compliments
